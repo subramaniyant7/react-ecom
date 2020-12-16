@@ -1,32 +1,27 @@
+import * as actionType from '../../utils/actionType';
 export const AddToCart = (data) => {
     return{
-        type : 'add_to_cart',
+        type : actionType.ADD_TO_CART,
         payload : data
-    }
-}
-
-export const LoadProducts = () => {
-    return{
-        type : 'load_products',
-    }
-}
-
-export const ClearProducts = () => {
-    return{
-        type : 'clear_products',
     }
 }
 
 export const updateCartProduct = (data) => {
     return{
-        type : 'update_cart',
+        type : actionType.UPDATE_CART_PRODUCT,
         payload : data
     }
 }
 
 export const deleteCartProduct = (data) => {
     return{
-        type : 'delete_cart',
+        type : actionType.DELETE_CART_PRODUCT,
         payload : data
+    }
+}
+
+export const ClearProducts = () => {
+    return{
+        type : actionType.CLEAR_CART_PRODUCT,
     }
 }

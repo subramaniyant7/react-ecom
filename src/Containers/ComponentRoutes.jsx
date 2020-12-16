@@ -8,13 +8,15 @@ import Cart from '../Components/cart';
 
 export const ComponentRoutes = {
   default: [
-    { path: '/', component: Home, page: 'Home', breadcrumb: { Home: '/' } },
-    { path: '/about', component: About, page: 'About', breadcrumb: { Home: '/' } },
-    { path: '/todo', component: Todolist, page: 'Todo', breadcrumb: { Home: '/' } },
-    { path: '/about', component: About, page: 'About', breadcrumb: { Home: '/' } },
-    { path: '/dashboard', component: Dashboard, page: 'Dashboard', breadcrumb: { Home: '/' } },
-    { path: '/cart', component: Cart, page: 'Cart', breadcrumb: { Home: '/' } },
-    { path: '/login', component: Login, page: 'Login', breadcrumb: { Home: '/' } },
-    { path: '/logout', component: Logout, page: 'Logout', breadcrumb: { Home: '/' } },
+    { path: '/', component: Home, page: 'Home' },
+    { path: '/about', component: About, page: 'About' },
+    { path: '/todo', component: Todolist, page: 'Todo' },
+    { path: '/about', component: About, page: 'About' },
+    { path: '/login', component: Login, page: 'Login' }
   ],
+  authenticate :[
+      { path: '/dashboard', component: Dashboard, page: 'Dashboard' },
+      { path: '/cart', component: Cart, page: 'Cart' },
+      { path: '/logout', component: Logout, page: 'Logout' }, 
+  ]
 };

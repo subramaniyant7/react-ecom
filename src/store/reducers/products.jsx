@@ -1,8 +1,10 @@
-import Products from '../../utils/products.json';
-const initialState = { cart : 0 , cartProducts : [] , list : Products}
-const Product = (state = initialState, action) => {
+import * as actionType from '../../utils/actionType';
+import { productState } from '../../utils/storeData';
+
+const Product = (state = productState, action) => {
+   
     switch(action.type){
-        case 'add_to_cart':
+        case actionType.ADD_TO_CART:
             let cartItems ='';
             const isExistProduct = state.cartProducts.some(cartList => (cartList.id === action.payload.id));
             if(isExistProduct){
@@ -17,7 +19,8 @@ const Product = (state = initialState, action) => {
             }
 
             return { ...state, cartProducts : cartItems, cart : cartItems.length };
-        case 'update_cart':
+
+        case actionType.UPDATE_CART_PRODUCT:
             let updateItems = state.cartProducts.map( cart => {
                 if(cart.id === action.payload){
                     cart.qty += 1;
@@ -26,13 +29,15 @@ const Product = (state = initialState, action) => {
             }); 
             return { ...state, cartProducts : updateItems };
 
-        case 'delete_cart':
+        case actionType.DELETE_CART_PRODUCT:
             let items = state.cartProducts.filter(cart => cart.id !== action.payload)
             return { ...state, cartProducts : items, cart : items.length };
-        case 'clear_products':
-            return initialState;
+
+        case actionType.CLEAR_CART_PRODUCT:
+            return productState;
+
         default:
-            return initialState;
+            return productState;
     }
 }
 

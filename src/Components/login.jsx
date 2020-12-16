@@ -1,25 +1,24 @@
-// import '../login.css';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import '../assests/css/login.css';
-import { Loggedin } from '../store/actions'
+import * as actionCreators from '../store/actions'
 const Login = (props) => {
+    const { isAuthenticated , Loggedin} = props;
     const [username,setName] = useState('');
     const [userpassword,setPassword] = useState('');
     const [error,setError] = useState(false);
-    const loggedIn = useSelector(state => state.isAuthenticated); 
-    const dispatch = useDispatch();
     const formSubmit = (e) => {
         e.preventDefault();
         if(username === 'subu' && userpassword === '123'){ 
-            dispatch(Loggedin({'username' : username , 'userpassword' : userpassword}));  
+            Loggedin({'username' : username , 'userpassword' : userpassword});  
             props.history.push("/")
         }else{
             setError(true);
         }
     }
 
-    if(loggedIn)  { 
+    if(isAuthenticated)  { 
         props.history.push('/')
     }
 
@@ -37,4 +36,10 @@ const Login = (props) => {
     );
 }
 
-export default Login;
+const connector = connect(
+    (state) => ({
+      isAuthenticated: state.isAuthenticated,
+    }),
+    dispatch => bindActionCreators({ ...actionCreators }, dispatch),
+  );
+export default connector(Login);

@@ -1,23 +1,21 @@
-import { AddToCart } from '../store/actions';
-import { useDispatch, useSelector } from 'react-redux';
+import * as actionCreators from '../store/actions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 const Home = (props) => {
-    const dispatch = useDispatch();
-    const productsList =  useSelector(state => state.productDetails.list)
-    const loggedIn = useSelector(state => state.isAuthenticated);
+
+    const { AddToCart, isAuthenticated, products } = props;
     const addProduct = (prdId) => {
-        if(!loggedIn) props.history.push('/login');
-        const cartProduct = productsList.find(prod => prod.id === prdId );
-        dispatch(AddToCart(cartProduct));
+        if(!isAuthenticated) props.history.push('/login');
+        const cartProduct = products.list.find(prod => prod.id === prdId );
+        AddToCart(cartProduct)
     }
 
-
    return (
-
         <div className="container">
             <div className="row">
                 {
-                    productsList.length > 0 ?
-                        productsList.map((product,index) =>
+                    products.list.length > 0 ?
+                        products.list.map((product,index) =>
                             <div className="col-md-4 col-sm-6 grid" key={index}>
                                 <div className="product-grid9">
                                     <div className="product-image9">
@@ -41,4 +39,11 @@ const Home = (props) => {
     );
 }
 
-export default Home;
+const connector = connect(
+    (state) => ({
+      products: state.productDetails,
+      isAuthenticated: state.isAuthenticated,
+    }),
+    dispatch => bindActionCreators({ ...actionCreators }, dispatch),
+  );
+export default connector(Home);

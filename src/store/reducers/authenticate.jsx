@@ -1,7 +1,9 @@
-const Authenticate = (state = false, action) => {
+import { authState } from '../../utils/storeData';
+import { user } from '../../utils/config';
+const Authenticate = (state = authState, action) => {
     switch(action.type){
         case 'isAuthenticated':
-            if(localStorage.getItem('name') === 'subu' && localStorage.getItem('key') === '123')  { 
+            if(localStorage.getItem('name') === user.name && localStorage.getItem('key') === user.password)  { 
                return !state;
             }
             return state;
@@ -12,7 +14,7 @@ const Authenticate = (state = false, action) => {
         case 'Logout' :
             localStorage.removeItem("name"); 
             localStorage.removeItem("key");
-            return false;
+            return authState;
         default:
             return state;
     }

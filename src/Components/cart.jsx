@@ -1,21 +1,16 @@
-import { useSelector,useDispatch } from 'react-redux';
-import { updateCartProduct,deleteCartProduct } from '../store/actions';
+import { connect } from 'react-redux';
+import * as actionCreators from '../store/actions';
+import { bindActionCreators } from 'redux';
 
 const Cart = (props) => {
-
-    const loggedIn = useSelector(state => state.isAuthenticated);  
-    const products = useSelector(state => state.productDetails);  
-    const dispatch = useDispatch();
-    if(!loggedIn)  props.history.push("/login")
+    const { isAuthenticated, products, updateCartProduct, deleteCartProduct } = props;
+    
+    if(!isAuthenticated)  props.history.push("/login")
      
+    const updateQty = (prdId) => { updateCartProduct(prdId); }
 
-    const updateQty = (prdId) => {
-        dispatch(updateCartProduct(prdId));
-    }
-
-    const deleteProduct = (prdId) => {
-        dispatch(deleteCartProduct(prdId));
-    }
+    const deleteProduct = (prdId) => { deleteCartProduct(prdId); }
+    
     return (
         <div className="cart_list">
             <table id="customers">
@@ -48,4 +43,11 @@ const Cart = (props) => {
     )
 }
 
-export default Cart;
+const connector = connect(
+    (state) => ({
+      isAuthenticated: state.isAuthenticated,
+      products : state.productDetails
+    }),
+    dispatch => bindActionCreators({ ...actionCreators }, dispatch),
+  );
+export default connector(Cart);
