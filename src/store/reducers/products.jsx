@@ -1,4 +1,4 @@
-import * as actionType from '../../utils/actionType';
+import * as actionType from '../actionType';
 import { productState } from '../../utils/storeData';
 
 const Product = (state = productState, action) => {
@@ -22,8 +22,8 @@ const Product = (state = productState, action) => {
 
         case actionType.UPDATE_CART_PRODUCT:
             let updateItems = state.cartProducts.map( cart => {
-                if(cart.id === action.payload){
-                    cart.qty += 1;
+                if(cart.id === action.payload.pid && action.payload.qty > 0){
+                    cart.qty = action.payload.qty;
                 }
                 return cart;
             }); 

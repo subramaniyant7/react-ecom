@@ -1,7 +1,8 @@
 import { useSelector } from 'react-redux';
 const Dashboard = (props) => {
-    const loggedIn = useSelector(state => state.isAuthenticated);    
-    if(!loggedIn)  props.history.push("/login")
+    const userInfo = useSelector(state => state.userInfo);  
+    const { authenticated } = userInfo;  
+    if(!authenticated)  props.history.push("/login")
     return ('Dashboard');
 }
 

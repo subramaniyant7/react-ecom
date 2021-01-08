@@ -1,29 +1,44 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import { ComponentRoutes } from './ComponentRoutes';
 import PageNotFound from '../Components/common/pagenotfound';
+import { Default } from '../Components/common/applayout';
+import 'font-awesome/css/font-awesome.min.css';
 
 const Routes = (props) => {
-  const { isAuthenticated } = props;
+  const { userInfo } = props;
+
+  const { authenticated } = userInfo;
   
+  const WrapperBind = (defaultProps) => {
+    const { component: Component, path  } = defaultProps;
+    return (
+      <Route
+        exact
+        path={path}
+        render={props =>
+            <Default {...props}>
+              <Component {...props} />
+            </Default>
+        }
+      />
+    );
+  };
   return (
     <>
         <Switch>
             {
               ComponentRoutes.default.map((item, index) => (
-                <Route key={index} path={item.path} exact component={item.component} />
+                <WrapperBind key={index} path={item.path} exact component={item.component} />
               ))
             }
             {
-              isAuthenticated &&
+              authenticated &&
               ComponentRoutes.authenticate.map((item, index) => (
-                <Route key={index} path={item.path} exact component={item.component} />
-
+                <WrapperBind key={index} path={item.path} exact component={item.component} />
               ))
             }
-
-            <Route path='*' component={PageNotFound}/>
+            <Route path='*' exact component={PageNotFound}/>
         </Switch>
     </>
   );
@@ -31,7 +46,7 @@ const Routes = (props) => {
 
 const connector = connect(
   (state) => ({
-    isAuthenticated: state.isAuthenticated,
+    userInfo: state.userInfo,
   })
 );
 export default connector(Routes);

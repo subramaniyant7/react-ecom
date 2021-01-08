@@ -1,13 +1,25 @@
-import * as actionCreators from '../store/actions';
+import { memo } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-const Home = (props) => {
+import { notify } from '../utils/helpers';  
+import * as actionCreators from '../store/actions';
+import Rating from './common/rating';
 
-    const { AddToCart, isAuthenticated, products } = props;
+const Home = (props) => {
+    const { AddToCart, userInfo, products, history } = props;
+    const { authenticated } = userInfo;
     const addProduct = (prdId) => {
-        if(!isAuthenticated) props.history.push('/login');
-        const cartProduct = products.list.find(prod => prod.id === prdId );
-        AddToCart(cartProduct)
+        if(authenticated) {
+            const cartProduct = products.list.find(prod => prod.id === prdId );
+            notify('success', 'Product added successfully', 'add to cart product');
+            AddToCart(cartProduct)
+          }else{
+            history.push('/login');
+          }
+    }
+
+    const prodDetails = (prdId) => {
+        history.push(`/detail/${prdId}`);
     }
 
    return (
@@ -18,16 +30,14 @@ const Home = (props) => {
                         products.list.map((product,index) =>
                             <div className="col-md-4 col-sm-6 grid" key={index}>
                                 <div className="product-grid9">
-                                    <div className="product-image9">
-                                        <a href="#">
-                                            <img className="pic-1" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-1.jpg" />
-                                            <img className="pic-2" src="http://bestjquery.com/tutorial/product-grid/demo6/images/img-2.jpg" />
-                                        </a>
+                                    <div className="product-image9 hover" onClick={()=>prodDetails(product.id)}>
+                                        <img className="pic-1" src={`img/${product.filename}.jpeg`} alt={product.filename} />
                                     </div>
                                     <div className="product-content">
                                         <h3 className="title">{product.title}</h3>
                                         <div className="price"> ${product.price}</div>
-                                        <button className="btn-primary" onClick={()=> addProduct(product.id)} >Add to Cart</button>
+                                        <Rating rating={product.rating} />
+                                        <button className="btn-primary hover" onClick={()=> addProduct(product.id)} >Add to Cart</button>
                                     </div>
                                 </div>
                             </div> 
@@ -42,8 +52,8 @@ const Home = (props) => {
 const connector = connect(
     (state) => ({
       products: state.productDetails,
-      isAuthenticated: state.isAuthenticated,
+      userInfo: state.userInfo,
     }),
     dispatch => bindActionCreators({ ...actionCreators }, dispatch),
   );
-export default connector(Home);
+export default connector(memo(Home));

@@ -1,4 +1,4 @@
-import * as actionType from '../../utils/actionType';
+import * as actionType from '../actionType';
 export const AddToCart = (data) => {
     return{
         type : actionType.ADD_TO_CART,

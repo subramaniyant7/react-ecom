@@ -1,16 +1,18 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { user } from '../utils/config';
 import '../assests/css/login.css';
 import * as actionCreators from '../store/actions'
 const Login = (props) => {
-    const { isAuthenticated , Loggedin} = props;
+    const { userInfo , Loggedin} = props;
+    const { authenticated } = userInfo;
     const [username,setName] = useState('');
     const [userpassword,setPassword] = useState('');
     const [error,setError] = useState(false);
     const formSubmit = (e) => {
         e.preventDefault();
-        if(username === 'subu' && userpassword === '123'){ 
+        if(username === user.name && userpassword === user.password){ 
             Loggedin({'username' : username , 'userpassword' : userpassword});  
             props.history.push("/")
         }else{
@@ -18,7 +20,7 @@ const Login = (props) => {
         }
     }
 
-    if(isAuthenticated)  { 
+    if(authenticated)  { 
         props.history.push('/')
     }
 
@@ -38,7 +40,7 @@ const Login = (props) => {
 
 const connector = connect(
     (state) => ({
-      isAuthenticated: state.isAuthenticated,
+      userInfo: state.userInfo,
     }),
     dispatch => bindActionCreators({ ...actionCreators }, dispatch),
   );
